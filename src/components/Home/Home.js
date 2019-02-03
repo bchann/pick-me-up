@@ -11,7 +11,7 @@ class Home extends Component {
           <p>
             Edit <code>src/components/Home/Home.js</code> and save to reload.
           </p>
-          <a class='btn btn-primary' href='/test' role='button'>
+          <a className='btn btn-primary' href='/test' role='button'>
             Route Test
           </a>
         </header>
