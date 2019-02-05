@@ -10,3 +10,13 @@
 .row {
   margin-bottom: 10px;
 }
+
+.suggestions-title {
+  text-align: start;
+  font-size: 18px;
+}
+
+.suggestions-item {
+  text-align: start;
+  color: grey;
+}

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import './Home.css';
+import React, { Component } from "react";
+import "./Home.css";
 
 class Home extends Component {
   render() {
@@ -13,11 +13,11 @@ class Home extends Component {
           </div>
 
           <div className='row justify-content-center'>
-            <div className='col-10 col-md-8'>
+            <div className='col-10 col-md-6'>
               <div className='input-group mb-3'>
                 <div className='input-group-prepend'>
                   <span className='input-group-text'>
-                    <i className='material-icons'>search</i>
+                    <i className='material-icons'>near_me</i>
                   </span>
                 </div>
                 <input type='text' className='form-control' placeholder='Destination' aria-label='Destination' />
@@ -30,23 +30,24 @@ class Home extends Component {
             </div>
           </div>
 
-          <div className='row justify-content-center'>
-            <div className='col'>
-              <h4>Recent Searches</h4>
-            </div>
+          <div className='row justify-content-center suggestions-title'>
+            <div className='col-10 col-md-6'>Recent Searches:</div>
           </div>
 
-          <div className='row justify-content-center'>
-            <div className='col-8 col-md-6'>
+          <div className='row justify-content-center suggestions-item'>
+            <div className='col-10 col-md-6'>
               <ul className='list-group'>
-                <a href='#' class='list-group-item list-group-item-action'>
+                <a href='#' class='list-group-item list-group-item-action justify-content-between d-flex'>
                   Geisel
+                  <i className='material-icons'>book</i>
                 </a>
-                <a href='#' class='list-group-item list-group-item-action'>
+                <a href='#' class='list-group-item list-group-item-action justify-content-between d-flex'>
                   Costco
+                  <i className='material-icons'>store</i>
                 </a>
-                <a href='#' class='list-group-item list-group-item-action'>
+                <a href='#' class='list-group-item list-group-item-action justify-content-between d-flex'>
                   McDonald's
+                  <i className='material-icons'>fastfood</i>
                 </a>
               </ul>
             </div>
