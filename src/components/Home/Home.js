@@ -1,7 +1,18 @@
-import React, { Component } from "react";
-import "./Home.css";
+import React, { Component } from 'react';
+import './Home.css';
 
 class Home extends Component {
+  constructor() {
+    super();
+    this.state = { dest: '' };
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange = e => {
+    this.setState({ dest: e.target.value });
+  };
+
   render() {
     return (
       <div className='home'>
@@ -20,9 +31,16 @@ class Home extends Component {
                     <i className='material-icons'>near_me</i>
                   </span>
                 </div>
-                <input type='text' className='form-control' placeholder='Destination' aria-label='Destination' />
+                <input
+                  type='text'
+                  className='form-control'
+                  placeholder='Destination'
+                  aria-label='Destination'
+                  value={this.state.dest}
+                  onChange={this.handleChange}
+                />
                 <div className='input-group-append'>
-                  <a className='btn btn-outline-secondary' role='button' href='/test'>
+                  <a className='btn btn-outline-secondary' role='button' href={'/routes/' + this.state.dest}>
                     Go
                   </a>
                 </div>
@@ -37,15 +55,24 @@ class Home extends Component {
           <div className='row justify-content-center suggestions-item'>
             <div className='col-10 col-md-6'>
               <ul className='list-group'>
-                <a href='#' class='list-group-item list-group-item-action justify-content-between d-flex'>
+                <a
+                  href='/routes/Geisel'
+                  className='list-group-item list-group-item-action justify-content-between d-flex'
+                >
                   Geisel
                   <i className='material-icons'>book</i>
                 </a>
-                <a href='#' class='list-group-item list-group-item-action justify-content-between d-flex'>
+                <a
+                  href='/routes/Costco'
+                  className='list-group-item list-group-item-action justify-content-between d-flex'
+                >
                   Costco
                   <i className='material-icons'>store</i>
                 </a>
-                <a href='#' class='list-group-item list-group-item-action justify-content-between d-flex'>
+                <a
+                  href="/routes/McDonald's"
+                  className='list-group-item list-group-item-action justify-content-between d-flex'
+                >
                   McDonald's
                   <i className='material-icons'>fastfood</i>
                 </a>

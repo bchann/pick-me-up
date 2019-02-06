@@ -4,7 +4,7 @@ import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Home from './components/Home/Home';
-import Test from './components/Test/Test';
+import Routes from './components/Routes/Routes';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
 
@@ -12,7 +12,7 @@ ReactDOM.render(
   <BrowserRouter>
     <Switch>
       <Route exact path='/' component={Home} />
-      <Route path='/test' component={Test} />
+      <Route path='/routes/:dest' render={props => <Routes {...props} />} />
       <Route component={Home} />
     </Switch>
   </BrowserRouter>,
