@@ -48,8 +48,8 @@ class Home extends Component {
             </div>
           </div>
 
-          <div className='row justify-content-center suggestions-title'>
-            <div className='col-10 col-md-6'>Recent Searches:</div>
+          <div className='row justify-content-center'>
+            <div className='col-10 col-md-6 suggestions-title'>Recent Searches:</div>
           </div>
 
           <div className='row justify-content-center suggestions-item'>
@@ -77,6 +77,21 @@ class Home extends Component {
                   <i className='material-icons'>fastfood</i>
                 </a>
               </ul>
+            </div>
+          </div>
+          <div className='row justify-content-center fixed-bottom'>
+            <div className='col-10 col-md-6'>
+              <nav className='nav nav-pills nav-justified'>
+                <a className='nav-item nav-link' href='/routes/Geisel'>
+                  <i className='material-icons'>directions_car</i>
+                </a>
+                <a className='nav-item nav-link active' href='/'>
+                  <i className='material-icons'>home</i>
+                </a>
+                <a className='nav-item nav-link' href='/friends'>
+                  <i className='material-icons'>face</i>
+                </a>
+              </nav>
             </div>
           </div>
         </div>
