@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Friends.css';
+import { Container } from 'react-bootstrap';
 
 class Friends extends Component {
   constructor() {
@@ -15,21 +16,8 @@ class Friends extends Component {
 
   render() {
     return (
-      <div className='friends'>
-        <div className='container'>
-          Friends Screen
-          <nav className='nav nav-pills nav-justified fixed-bottom'>
-            <a className='nav-item nav-link' href='/routes/Geisel'>
-              <i className='material-icons'>directions_car</i>
-            </a>
-            <a className='nav-item nav-link' href='/'>
-              <i className='material-icons'>home</i>
-            </a>
-            <a className='nav-item nav-link active' href='/friends'>
-              <i className='material-icons'>face</i>
-            </a>
-          </nav>
-        </div>
+      <div className="friends">
+        <Container>Friends Screen</Container>
       </div>
     );
   }

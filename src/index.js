@@ -3,20 +3,13 @@ import './index.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Home from './components/Home/Home';
-import Routes from './components/Routes/Routes';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
-import Friends from './components/Friends/Friends';
+import App from './components/App';
 
 ReactDOM.render(
   <BrowserRouter>
-    <Switch>
-      <Route exact path='/' component={Home} />
-      <Route exact path='/friends' component={Friends} />
-      <Route path='/routes/:dest' render={props => <Routes {...props} />} />
-      <Route component={Home} />
-    </Switch>
+    <App />
   </BrowserRouter>,
   document.getElementById('root')
 );

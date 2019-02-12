@@ -10,13 +10,3 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
-
-a,
-a:hover {
-  color: #ced4da;
-  background-color: white;
-}
-
-.active {
-  background-color: #ced4da !important;
-}
