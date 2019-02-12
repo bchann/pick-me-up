@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, InputGroup, Button, FormControl, ListGroup } from 'react-bootstrap';
-import './Home.css';
+import './Home.scss';
 
 class Home extends Component {
   constructor() {
@@ -20,7 +20,7 @@ class Home extends Component {
         <Container>
           <Row className="justify-content-center">
             <Col>
-              <h1>Pick Me Up</h1>
+              <h1 style={{ color: 'var(--primary)' }}>Pick Me Up</h1>
             </Col>
           </Row>
 

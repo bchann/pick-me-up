@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Col, Container, Row, Card, ListGroup, ListGroupItem, Badge } from 'react-bootstrap';
-import './Routes.css';
+import './Routes.scss';
 
 class Routes extends Component {
   constructor(props) {

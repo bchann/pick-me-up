@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Friends.css';
+import './Friends.scss';
 import { Container } from 'react-bootstrap';
 
 class Friends extends Component {
