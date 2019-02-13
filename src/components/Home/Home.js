@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, InputGroup, Button, FormControl, ListGroup } from 'react-bootstrap';
 import './Home.scss';
+import BottomNav from '../BottomNav/BottomNav';
 
 class Home extends Component {
   constructor() {
@@ -74,6 +75,7 @@ class Home extends Component {
             </Col>
           </Row>
         </Container>
+        <BottomNav activeTab="home" />
       </div>
     );
   }

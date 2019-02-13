@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Container, Row, Card, ListGroup, ListGroupItem, Badge } from 'react-bootstrap';
 import './Routes.scss';
+import BottomNav from '../BottomNav/BottomNav';
 
 class Routes extends Component {
   constructor(props) {
@@ -93,6 +94,7 @@ class Routes extends Component {
             </Col>
           </Row>
         </Container>
+        <BottomNav activeTab="routes" />
       </div>
     );
   }
