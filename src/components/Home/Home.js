@@ -59,15 +59,15 @@ class Home extends Component {
           <Row className="justify-content-center suggestions-item">
             <Col xs={10} md={6}>
               <ListGroup>
-                <ListGroup.Item href="/routes/Geisel" className="justify-content-between d-flex">
+                <ListGroup.Item action href="/routes/Geisel" className="justify-content-between d-flex">
                   Geisel
                   <i className="material-icons">book</i>
                 </ListGroup.Item>
-                <ListGroup.Item href="/routes/Costco" className="justify-content-between d-flex">
+                <ListGroup.Item action href="/routes/Costco" className="justify-content-between d-flex">
                   Costco
                   <i className="material-icons">store</i>
                 </ListGroup.Item>
-                <ListGroup.Item href="/routes/McDonald's" className="justify-content-between d-flex">
+                <ListGroup.Item action href="/routes/McDonald's" className="justify-content-between d-flex">
                   McDonald's
                   <i className="material-icons">fastfood</i>
                 </ListGroup.Item>

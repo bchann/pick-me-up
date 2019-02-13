@@ -17,7 +17,7 @@ class Routes extends Component {
         <Container>
           <Row className="justify-content-center">
             <Col xs={10} md={6}>
-              <h1>Pick Me Up</h1>
+              <h1 style={{ color: 'var(--primary)' }}>Pick Me Up</h1>
             </Col>
           </Row>
           <Row className="justify-content-center">
@@ -43,7 +43,7 @@ class Routes extends Component {
           </Row>
           <Row>
             <Col xs={6}>
-              <Card>
+              <Card bg="primary">
                 <Card.Header>Bus</Card.Header>
                 <ListGroup className="list-group-flush">
                   <ListGroupItem className="d-flex justify-content-between align-items-center">
@@ -74,7 +74,7 @@ class Routes extends Component {
               </Card>
             </Col>
             <Col xs={6}>
-              <Card>
+              <Card bg="primary">
                 <Card.Header>Carpool</Card.Header>
                 <ListGroup className="list-group-flush">
                   <ListGroupItem className="d-flex justify-content-between align-items-center">
