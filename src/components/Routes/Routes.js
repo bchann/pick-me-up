@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Col, Container, Row, Card, ListGroup, ListGroupItem, Badge } from 'react-bootstrap';
-import './Routes.scss';
+import { Col, Container, Row } from 'react-bootstrap';
 import BottomNav from '../BottomNav/BottomNav';
+import './Routes.scss';
 
 class Routes extends Component {
   constructor(props) {
@@ -38,59 +38,7 @@ class Routes extends Component {
           </Row>
           <Row className="justify-content-center">
             <Col xs={10} md={6}>
-              Best Options:
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={6}>
-              <Card bg="primary">
-                <Card.Header>Bus</Card.Header>
-                <ListGroup className="list-group-flush">
-                  <ListGroupItem className="d-flex justify-content-between align-items-center">
-                    MTS 202 @ 2:15PM
-                    <Badge pill variant="primary">
-                      5
-                    </Badge>
-                  </ListGroupItem>
-                  <ListGroupItem className="d-flex justify-content-between align-items-center">
-                    UCSD Shuttle @ 2:20PM
-                    <Badge pill variant="primary">
-                      7
-                    </Badge>
-                  </ListGroupItem>
-                  <ListGroupItem className="d-flex justify-content-between align-items-center">
-                    MTS 105 @ 2:20PM
-                    <Badge pill variant="primary">
-                      10
-                    </Badge>
-                  </ListGroupItem>
-                  <ListGroupItem className="d-flex justify-content-between align-items-center">
-                    MTS 202 @ 2:30PM
-                    <Badge pill variant="primary">
-                      17
-                    </Badge>
-                  </ListGroupItem>
-                </ListGroup>
-              </Card>
-            </Col>
-            <Col xs={6}>
-              <Card bg="primary">
-                <Card.Header>Carpool</Card.Header>
-                <ListGroup className="list-group-flush">
-                  <ListGroupItem className="d-flex justify-content-between align-items-center">
-                    Brian <br /> Costa to Geisel @ 2:15PM
-                    <Badge pill variant="primary">
-                      5
-                    </Badge>
-                  </ListGroupItem>
-                  <ListGroupItem className="d-flex justify-content-between align-items-center">
-                    Sunny <br /> Axiom to CICC @ 2:30PM
-                    <Badge pill variant="primary">
-                      15
-                    </Badge>
-                  </ListGroupItem>
-                </ListGroup>
-              </Card>
+              Friends planned trips:
             </Col>
           </Row>
         </Container>
