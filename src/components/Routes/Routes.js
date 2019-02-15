@@ -103,7 +103,7 @@ class Routes extends Component {
           </Row> */}
           <Row className="justify-content-center">
             <Col xs={10} md={6}>
-              Friends planned trips:
+              Friend's planned trips:
             </Col>
           </Row>
           {this.state.trips.map((trip, index) => {
