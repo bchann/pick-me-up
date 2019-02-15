@@ -55,13 +55,6 @@ class App extends Component {
               <Button onClick={this.state.user ? this.logout : this.login}>
                 {this.state.user ? 'Logout' : 'Login'}
               </Button>
-              <div
-                class="fb-login-button"
-                data-size="large"
-                data-button-type="login_with"
-                data-auto-logout-link="true"
-                data-use-continue-as="true"
-              />
             </Popover>
           }
         >
