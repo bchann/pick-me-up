@@ -16,3 +16,12 @@
 ul > li {
   font-size: 12px;
 }
+
+.add-button {
+  position: absolute;
+  bottom: 50px;
+  right: 10px;
+  color: white;
+  display: flex;
+  align-items: center;
+}
