@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Col, Container, Row, Button, Modal, Form, Card } from 'react-bootstrap';
-import BottomNav from '../BottomNav/BottomNav';
-import { auth } from '../../firebase.js';
+import { Button, Card, Col, Container, Form, Modal, Row } from 'react-bootstrap';
 import { firestore } from '../../firebase';
+import { auth } from '../../firebase.js';
+import BottomNav from '../BottomNav/BottomNav';
 import './Routes.scss';
 
 class Routes extends Component {
@@ -12,7 +12,7 @@ class Routes extends Component {
     this.showForm = this.showForm.bind(this);
     this.closeForm = this.closeForm.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.submitForm = this.submitForm.bind(this);
+    this.addTrip = this.addTrip.bind(this);
 
     this.state = {
       dest: this.props.match.params.dest,
@@ -31,24 +31,24 @@ class Routes extends Component {
       }
     });
 
-    firestore
-      .collection('trips')
-      .get()
-      .then(snapshot => {
+    firestore.collection('trips').onSnapshot(
+      snapshot => {
         var trips = [];
         snapshot.forEach(doc => {
-          trips.push(doc.data());
+          var trip = doc.data();
+          trip.id = doc.id;
+          trips.push(trip);
         });
         this.setState({ trips: trips });
-      })
-      .catch(err => {
+      },
+      err => {
         console.log('Error getting trips', err);
-      });
+      }
+    );
   }
 
   showForm() {
     this.setState({ show: true });
-    console.log(this.state.trips);
   }
 
   closeForm() {
@@ -61,7 +61,7 @@ class Routes extends Component {
     });
   }
 
-  submitForm(e) {
+  addTrip(e) {
     e.preventDefault();
 
     var trip = {
@@ -74,6 +74,13 @@ class Routes extends Component {
     firestore.collection('trips').add(trip);
 
     this.closeForm();
+  }
+
+  removeTrip(tripID) {
+    firestore
+      .collection('trips')
+      .doc(tripID)
+      .delete();
   }
 
   render() {
@@ -103,16 +110,21 @@ class Routes extends Component {
           </Row> */}
           <Row className="justify-content-center">
             <Col xs={10} md={6}>
-              Friend's planned trips:
+              Friend's planned trips to {this.state.dest}:
             </Col>
           </Row>
-          {this.state.trips.map((trip, index) => {
+          {this.state.trips.map(trip => {
             return (
-              <Row key={index} className="justify-content-center">
+              <Row key={trip.id} className="justify-content-center">
                 <Col xs={10} md={6}>
-                  <Card>
+                  <Card border="primary">
                     <Card.Body>
-                      <Card.Title>{trip.user}</Card.Title>
+                      <Card.Title>
+                        {trip.user}
+                        <i onClick={() => this.removeTrip(trip.id)} className="material-icons remove-trip">
+                          clear
+                        </i>
+                      </Card.Title>
                       <Card.Text>
                         Driving from {trip.from} to {trip.to} at {trip.time}
                       </Card.Text>
@@ -166,10 +178,10 @@ class Routes extends Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={this.closeForm}>
+            <Button variant="outline-secondary" onClick={this.closeForm}>
               Cancel
             </Button>
-            <Button variant="primary" onClick={this.submitForm}>
+            <Button variant="primary" onClick={this.addTrip}>
               Add
             </Button>
           </Modal.Footer>

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import { Button, Image, OverlayTrigger, Popover } from 'react-bootstrap';
 import { Route, Switch } from 'react-router-dom';
-import Routes from './Routes/Routes';
+import { auth, provider } from '../firebase.js';
+import './App.scss';
 import Friends from './Friends/Friends';
 import Home from './Home/Home';
-import { auth, provider } from '../firebase.js';
-import { Button, Image, OverlayTrigger, Popover } from 'react-bootstrap';
-import './App.scss';
+import Routes from './Routes/Routes';
 
 class App extends Component {
   constructor() {
@@ -51,7 +51,7 @@ class App extends Component {
           rootClose={true}
           placement="bottom"
           overlay={
-            <Popover id="popover-basic" title={this.state.user ? this.state.user.displayName : 'Login'}>
+            <Popover id="popover-basic" title={this.state.user ? this.state.user.displayName : ''}>
               <Button onClick={this.state.user ? this.logout : this.login}>
                 {this.state.user ? 'Logout' : 'Login'}
               </Button>
@@ -61,7 +61,7 @@ class App extends Component {
           <Image
             className="profile-img"
             src={this.state.user ? this.state.user.photoURL : require('../pictures/missing-user-image.png')}
-            roundedCircle
+            rounded
             height="50"
             width="50"
           />

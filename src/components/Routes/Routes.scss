@@ -18,10 +18,18 @@ ul > li {
 }
 
 .add-button {
-  position: absolute;
+  position: fixed;
   bottom: 50px;
   right: 10px;
   color: white;
   display: flex;
   align-items: center;
+}
+
+.remove-trip {
+  color: var(--primary);
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 20px;
 }
