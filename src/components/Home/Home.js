@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, InputGroup, Button, FormControl, ListGroup } from 'react-bootstrap';
+import { Button, Col, Container, FormControl, InputGroup, Row } from 'react-bootstrap';
 import './Home.scss';
-import BottomNav from '../BottomNav/BottomNav';
 
 class Home extends Component {
   constructor() {
     super();
     this.state = { dest: '' };
-
-    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange = e => {
-    this.setState({ dest: e.target.value });
+    this.setState({
+      [e.target.name]: e.target.value
+    });
   };
 
   render() {
@@ -38,11 +37,12 @@ class Home extends Component {
                   className="form-control"
                   placeholder="Destination"
                   aria-label="Destination"
+                  name="dest"
                   value={this.state.dest}
                   onChange={this.handleChange}
                 />
                 <InputGroup.Append>
-                  <Button variant="outline-secondary" href={'/routes/' + this.state.dest}>
+                  <Button variant="outline-secondary" href="#routes-tab" className="tab-click">
                     Go
                   </Button>
                 </InputGroup.Append>
@@ -50,32 +50,30 @@ class Home extends Component {
             </Col>
           </Row>
 
-          <Row className="justify-content-center">
+          {/* <Row className="justify-content-center">
             <Col xs={10} md={6} className="suggestions-title">
               Recent Searches:
             </Col>
           </Row>
-
           <Row className="justify-content-center suggestions-item">
             <Col xs={10} md={6}>
-              <ListGroup>
-                <ListGroup.Item action href="/routes/Geisel" className="justify-content-between d-flex">
+              <ListGroup id="suggestions">
+                <ListGroup.Item action href="#routes-tab" className="justify-content-between d-flex tab-click">
                   Geisel
                   <i className="material-icons">book</i>
                 </ListGroup.Item>
-                <ListGroup.Item action href="/routes/Costco" className="justify-content-between d-flex">
+                <ListGroup.Item action href="#routes-tab" className="justify-content-between d-flex tab-click">
                   Costco
                   <i className="material-icons">store</i>
                 </ListGroup.Item>
-                <ListGroup.Item action href="/routes/McDonald's" className="justify-content-between d-flex">
+                <ListGroup.Item action href="#routes-tab" className="justify-content-between d-flex tab-click">
                   McDonald's
                   <i className="material-icons">fastfood</i>
                 </ListGroup.Item>
               </ListGroup>
             </Col>
-          </Row>
+          </Row> */}
         </Container>
-        <BottomNav activeTab="home" />
       </div>
     );
   }

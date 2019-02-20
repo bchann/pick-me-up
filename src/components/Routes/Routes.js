@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Button, Card, Col, Container, Form, Modal, Row } from 'react-bootstrap';
 import { firestore } from '../../firebase';
 import { auth } from '../../firebase.js';
-import BottomNav from '../BottomNav/BottomNav';
 import './Routes.scss';
 
 class Routes extends Component {
@@ -15,7 +14,7 @@ class Routes extends Component {
     this.addTrip = this.addTrip.bind(this);
 
     this.state = {
-      dest: this.props.match.params.dest,
+      dest: '',
       trips: [],
       user: null,
       from: '',
@@ -28,23 +27,23 @@ class Routes extends Component {
     auth.onAuthStateChanged(user => {
       if (user) {
         this.setState({ user });
+
+        firestore.collection('trips').onSnapshot(
+          snapshot => {
+            var trips = [];
+            snapshot.forEach(doc => {
+              var trip = doc.data();
+              trip.id = doc.id;
+              trips.push(trip);
+            });
+            this.setState({ trips: trips });
+          },
+          err => {
+            console.log('Error getting trips', err);
+          }
+        );
       }
     });
-
-    firestore.collection('trips').onSnapshot(
-      snapshot => {
-        var trips = [];
-        snapshot.forEach(doc => {
-          var trip = doc.data();
-          trip.id = doc.id;
-          trips.push(trip);
-        });
-        this.setState({ trips: trips });
-      },
-      err => {
-        console.log('Error getting trips', err);
-      }
-    );
   }
 
   showForm() {
@@ -92,22 +91,6 @@ class Routes extends Component {
               <h1 style={{ color: 'var(--primary)' }}>Pick Me Up</h1>
             </Col>
           </Row>
-          {/* <Row className="justify-content-center">
-            <Col xs={2} className="title-text">
-              From:
-            </Col>
-            <Col xs={8} md={4} className="title-text">
-              Current Location
-            </Col>
-          </Row>
-          <Row className="justify-content-center">
-            <Col xs={2} className="title-text">
-              To:
-            </Col>
-            <Col xs={8} md={4} className="title-text">
-              {this.state.dest}
-            </Col>
-          </Row> */}
           <Row className="justify-content-center">
             <Col xs={10} md={6}>
               Friend's planned trips to {this.state.dest}:
@@ -186,7 +169,6 @@ class Routes extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        <BottomNav activeTab="routes" />
       </div>
     );
   }
