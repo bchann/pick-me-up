@@ -16,7 +16,7 @@ import {
 import { auth, provider, firestore } from '../firebase.js';
 import Friends from './Friends/Friends';
 import Home from './Home/Home';
-import Routes from './Routes/Routes';
+import UserTrips from './UserTrips/UserTrips';
 import './App.scss';
 
 class App extends Component {
@@ -24,7 +24,8 @@ class App extends Component {
     super();
 
     this.state = {
-      show: true,
+      activeTab: 'home',
+      showLoginModal: true,
       currentUser: null,
       messengerName: ''
     };
@@ -42,6 +43,7 @@ class App extends Component {
     auth.signInWithPopup(provider).then(res => {
       var user = res.user;
       var additionalInfo = res.additionalUserInfo;
+
       this.setState({ currentUser: user });
 
       var userRef = firestore.collection('users').doc(user.uid);
@@ -70,18 +72,22 @@ class App extends Component {
 
   logout = () => {
     auth.signOut().then(() => {
-      this.setState({ currentUser: null, messengerName: '' });
+      this.setState({ currentUser: null, messengerName: '', activeTab: 'home' });
     });
   };
 
   toggleModal = () => {
-    this.setState({ show: !this.state.show });
+    this.setState({ showLoginModal: !this.state.showLoginModal });
   };
 
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
+  };
+
+  tabSelected = e => {
+    this.setState({ activeTab: e });
   };
 
   render() {
@@ -110,7 +116,7 @@ class App extends Component {
           />
         </OverlayTrigger>
 
-        <Modal show={this.state.currentUser === null && this.state.show} onHide={this.toggleModal} centered>
+        <Modal show={this.state.currentUser === null && this.state.showLoginModal} onHide={this.toggleModal} centered>
           <Modal.Header>
             <Modal.Title>Login</Modal.Title>
           </Modal.Header>
@@ -172,10 +178,10 @@ class App extends Component {
           </Modal.Footer>
         </Modal>
 
-        <Tab.Container defaultActiveKey="home">
+        <Tab.Container defaultActiveKey="home" activeKey={this.state.activeTab} onSelect={this.tabSelected}>
           <Nav justify variant="pills" className="fixed-bottom">
             <Nav.Item>
-              <Nav.Link className="nav-item" eventKey="routes" disabled={this.state.currentUser == null}>
+              <Nav.Link className="nav-item" eventKey="routes" disabled={this.state.currentUser === null}>
                 <i className="material-icons">directions_car</i>
               </Nav.Link>
             </Nav.Item>
@@ -185,14 +191,14 @@ class App extends Component {
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link className="nav-item" eventKey="friends" disabled={this.state.currentUser == null}>
+              <Nav.Link className="nav-item" eventKey="friends" disabled={this.state.currentUser === null}>
                 <i className="material-icons">people</i>
               </Nav.Link>
             </Nav.Item>
           </Nav>
           <Tab.Content>
             <Tab.Pane eventKey="routes">
-              <Routes />
+              <UserTrips />
             </Tab.Pane>
             <Tab.Pane id="home-tab" eventKey="home">
               <Home />

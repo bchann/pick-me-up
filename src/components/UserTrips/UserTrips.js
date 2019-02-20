@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Button, Card, Col, Container, Form, Modal, Row } from 'react-bootstrap';
 import { firestore } from '../../firebase';
 import { auth } from '../../firebase.js';
-import './Routes.scss';
+import './UserTrips.scss';
 
-class Routes extends Component {
+class UserTrips extends Component {
   constructor(props) {
     super(props);
 
@@ -28,20 +28,23 @@ class Routes extends Component {
       if (user) {
         this.setState({ user });
 
-        firestore.collection('trips').onSnapshot(
-          snapshot => {
-            var trips = [];
-            snapshot.forEach(doc => {
-              var trip = doc.data();
-              trip.id = doc.id;
-              trips.push(trip);
-            });
-            this.setState({ trips: trips });
-          },
-          err => {
-            console.log('Error getting trips', err);
-          }
-        );
+        firestore
+          .collection('trips')
+          .where('createdBy', '==', user.uid)
+          .onSnapshot(
+            snapshot => {
+              var trips = [];
+              snapshot.forEach(doc => {
+                var trip = doc.data();
+                trip.id = doc.id;
+                trips.push(trip);
+              });
+              this.setState({ trips: trips });
+            },
+            err => {
+              console.log('Error getting user trips', err);
+            }
+          );
       }
     });
   }
@@ -67,7 +70,8 @@ class Routes extends Component {
       from: this.state.from,
       to: this.state.to,
       time: this.state.time,
-      user: this.state.user.displayName
+      user: this.state.user.displayName,
+      createdBy: this.state.user.uid
     };
 
     firestore.collection('trips').add(trip);
@@ -93,7 +97,7 @@ class Routes extends Component {
           </Row>
           <Row className="justify-content-center">
             <Col xs={10} md={6}>
-              Friend's planned trips to {this.state.dest}:
+              Your planned trips:
             </Col>
           </Row>
           {this.state.trips.map(trip => {
@@ -174,4 +178,4 @@ class Routes extends Component {
   }
 }
 
-export default Routes;
+export default UserTrips;
