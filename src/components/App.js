@@ -45,19 +45,24 @@ class App extends Component {
       this.setState({ currentUser: user });
 
       var userRef = firestore.collection('users').doc(user.uid);
+      var userData = {};
+      var messengerURL = 'https://m.me/' + this.state.messengerName;
 
       userRef.get().then(docSnapshot => {
+        // Create new user
         if (!docSnapshot.exists) {
-          var userData = {};
           userData.email = user.email;
           userData.fullName = additionalInfo.profile.name;
           userData.firstName = additionalInfo.profile.first_name;
           userData.lastName = additionalInfo.profile.last_name;
           userData.fbUID = additionalInfo.profile.id;
           userData.photoURL = user.photoURL;
-          userData.messengerURL = 'https://m.me/' + this.state.messengerName;
+          userData.messengerURL = messengerURL;
 
           userRef.set(userData);
+        } else if (messengerURL !== docSnapshot.get('messengerURL')) {
+          // Update username if different
+          userRef.update({ messengerURL });
         }
       });
     });
