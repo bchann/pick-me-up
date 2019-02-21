@@ -1,4 +1,4 @@
-.routes {
+.user-trips {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -24,12 +24,4 @@ ul > li {
   color: white;
   display: flex;
   align-items: center;
-}
-
-.remove-trip {
-  color: var(--primary);
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  font-size: 20px;
 }

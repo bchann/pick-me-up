@@ -1,22 +1,16 @@
 import React, { Component } from 'react';
 import { Button, Card, Col, Container, Form, Modal, Row } from 'react-bootstrap';
-import { firestore } from '../../firebase';
-import { auth } from '../../firebase.js';
+import { firestore, auth } from '../../firebase';
 import './UserTrips.scss';
 
 class UserTrips extends Component {
   constructor(props) {
     super(props);
 
-    this.showForm = this.showForm.bind(this);
-    this.closeForm = this.closeForm.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.addTrip = this.addTrip.bind(this);
-
     this.state = {
+      currentUser: null,
       dest: '',
       trips: [],
-      user: null,
       from: '',
       to: '',
       time: ''
@@ -26,15 +20,15 @@ class UserTrips extends Component {
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (user) {
-        this.setState({ user });
+        this.setState({ currentUser: user });
 
         firestore
           .collection('trips')
           .where('createdBy', '==', user.uid)
           .onSnapshot(
-            snapshot => {
+            docSnapshot => {
               var trips = [];
-              snapshot.forEach(doc => {
+              docSnapshot.forEach(doc => {
                 var trip = doc.data();
                 trip.id = doc.id;
                 trips.push(trip);
@@ -49,35 +43,35 @@ class UserTrips extends Component {
     });
   }
 
-  showForm() {
+  showForm = () => {
     this.setState({ show: true });
-  }
+  };
 
-  closeForm() {
+  closeForm = () => {
     this.setState({ show: false, from: '', to: '', time: '' });
-  }
+  };
 
-  handleChange(e) {
+  handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
-  }
+  };
 
-  addTrip(e) {
+  addTrip = e => {
     e.preventDefault();
 
     var trip = {
       from: this.state.from,
       to: this.state.to,
       time: this.state.time,
-      user: this.state.user.displayName,
-      createdBy: this.state.user.uid
+      displayName: this.state.currentUser.displayName,
+      createdBy: this.state.currentUser.uid
     };
 
     firestore.collection('trips').add(trip);
 
     this.closeForm();
-  }
+  };
 
   removeTrip(tripID) {
     firestore
@@ -88,7 +82,7 @@ class UserTrips extends Component {
 
   render() {
     return (
-      <div className="routes">
+      <div className="user-trips">
         <Container>
           <Row className="justify-content-center">
             <Col xs={10} md={6}>
@@ -107,8 +101,8 @@ class UserTrips extends Component {
                   <Card border="primary">
                     <Card.Body>
                       <Card.Title>
-                        {trip.user}
-                        <i onClick={() => this.removeTrip(trip.id)} className="material-icons remove-trip">
+                        {trip.displayName}
+                        <i onClick={() => this.removeTrip(trip.id)} className="material-icons trip-card-action">
                           clear
                         </i>
                       </Card.Title>

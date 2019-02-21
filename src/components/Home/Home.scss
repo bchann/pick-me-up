@@ -1,4 +1,11 @@
 .home {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-centered {
   text-align: center;
   min-height: 100vh;
   display: flex;
@@ -19,4 +26,16 @@
 .suggestions-item {
   text-align: start;
   color: grey;
+}
+
+.search-button {
+  color: var(--primary);
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+
+.trip-owner-picture {
+  height: 30px;
+  width: 30px;
 }

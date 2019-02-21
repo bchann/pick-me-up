@@ -13,7 +13,7 @@ import {
   Row,
   Col
 } from 'react-bootstrap';
-import { auth, provider, firestore } from '../firebase.js';
+import { auth, provider, firestore } from '../firebase';
 import Friends from './Friends/Friends';
 import Home from './Home/Home';
 import UserTrips from './UserTrips/UserTrips';

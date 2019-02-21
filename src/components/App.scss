@@ -28,3 +28,11 @@
 .link {
   text-decoration: underline;
 }
+
+.trip-card-action {
+  color: var(--primary);
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 20px;
+}
