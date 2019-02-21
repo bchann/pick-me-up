@@ -20,7 +20,7 @@ class Home extends Component {
             docSnapshot.forEach(tripDoc => {
               firestore
                 .collection('users')
-                .doc(user.uid)
+                .doc(tripDoc.data().createdBy)
                 .get()
                 .then(userDoc => {
                   if (userDoc.exists) {
