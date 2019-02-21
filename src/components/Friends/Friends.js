@@ -6,7 +6,7 @@ class Friends extends Component {
   render() {
     return (
       <div className="friends">
-        <Container>Friends Screen</Container>
+        <Container>Your Friends:</Container>
       </div>
     );
   }

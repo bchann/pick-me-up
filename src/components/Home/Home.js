@@ -17,28 +17,30 @@ class Home extends Component {
         firestore.collection('trips').onSnapshot(
           docSnapshot => {
             var trips = [];
-            docSnapshot.forEach(tripDoc => {
-              var tripData = tripDoc.data();
-              if (tripData.createdBy !== user.uid) {
-                firestore
-                  .collection('users')
-                  .doc(tripData.createdBy)
-                  .get()
-                  .then(userDoc => {
-                    if (userDoc.exists) {
-                      var userData = userDoc.data();
-                      var trip = tripData;
-                      trip.id = tripDoc.id;
-                      trip.userIMG = userData.photoURL;
-                      trip.messengerURL = userData.messengerURL;
-                      trips.push(trip);
-                    }
-                  })
-                  .catch(err => {
-                    console.log('Error getting user: ' + user.uid, err);
-                  });
-              }
-            });
+            if (!docSnapshot.empty) {
+              docSnapshot.forEach(tripDoc => {
+                var tripData = tripDoc.data();
+                if (tripData.createdBy !== user.uid) {
+                  firestore
+                    .collection('users')
+                    .doc(tripData.createdBy)
+                    .get()
+                    .then(userDoc => {
+                      if (userDoc.exists) {
+                        var userData = userDoc.data();
+                        var trip = tripData;
+                        trip.id = tripDoc.id;
+                        trip.userIMG = userData.photoURL;
+                        trip.messengerURL = userData.messengerURL;
+                        trips.push(trip);
+                      }
+                    })
+                    .catch(err => {
+                      console.log('Error getting user: ' + user.uid, err);
+                    });
+                }
+              });
+            }
 
             this.setState({ trips: trips });
           },
@@ -76,11 +78,11 @@ class Home extends Component {
           <div className="home">
             <Container>
               <i onClick={this.toggleSearch} className="material-icons search-button">
-                search
+                arrow_back
               </i>
               <Row className="justify-content-center">
                 <Col xs={10} md={6}>
-                  <h1 style={{ color: 'var(--primary)' }}>Pick Me Up</h1>
+                  <h1 className="trips-title">Pick Me Up</h1>
                 </Col>
               </Row>
               <Row className="justify-content-center">

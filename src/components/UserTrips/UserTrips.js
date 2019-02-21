@@ -28,11 +28,13 @@ class UserTrips extends Component {
           .onSnapshot(
             docSnapshot => {
               var trips = [];
-              docSnapshot.forEach(doc => {
-                var trip = doc.data();
-                trip.id = doc.id;
-                trips.push(trip);
-              });
+              if (!docSnapshot.empty) {
+                docSnapshot.forEach(doc => {
+                  var trip = doc.data();
+                  trip.id = doc.id;
+                  trips.push(trip);
+                });
+              }
               this.setState({ trips: trips });
             },
             err => {
@@ -100,14 +102,11 @@ class UserTrips extends Component {
                 <Col xs={10} md={6}>
                   <Card border="primary">
                     <Card.Body>
-                      <Card.Title>
-                        {trip.displayName}
+                      <Card.Text>
                         <i onClick={() => this.removeTrip(trip.id)} className="material-icons trip-card-action">
                           clear
                         </i>
-                      </Card.Title>
-                      <Card.Text>
-                        Driving from {trip.from} to {trip.to} at {trip.time}
+                        {trip.from} to {trip.to} at {trip.time}
                       </Card.Text>
                     </Card.Body>
                   </Card>
@@ -162,7 +161,11 @@ class UserTrips extends Component {
             <Button variant="outline-secondary" onClick={this.closeForm}>
               Cancel
             </Button>
-            <Button variant="primary" onClick={this.addTrip}>
+            <Button
+              variant="primary"
+              onClick={this.addTrip}
+              disabled={this.state.from === '' || this.state.to === '' || this.state.time === ''}
+            >
               Add
             </Button>
           </Modal.Footer>

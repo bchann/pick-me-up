@@ -18,6 +18,11 @@
   margin-bottom: 20px;
 }
 
+.trips-title {
+  color: var(--primary);
+  padding-left: 40px;
+}
+
 .suggestions-title {
   text-align: start;
   font-size: 18px;
@@ -31,8 +36,10 @@
 .search-button {
   color: var(--primary);
   position: absolute;
-  left: 20px;
-  top: 20px;
+  left: 50px;
+  top: 50px;
+  font-size: 30px;
+  z-index: 900;
 }
 
 .trip-owner-picture {
