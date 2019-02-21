@@ -18,23 +18,28 @@ class Home extends Component {
           docSnapshot => {
             var trips = [];
             docSnapshot.forEach(tripDoc => {
-              firestore
-                .collection('users')
-                .doc(tripDoc.data().createdBy)
-                .get()
-                .then(userDoc => {
-                  if (userDoc.exists) {
-                    var trip = tripDoc.data();
-                    trip.id = tripDoc.id;
-                    trip.userIMG = userDoc.data().photoURL;
-                    trip.messengerURL = userDoc.data().messengerURL;
-                    trips.push(trip);
-                  }
-                })
-                .catch(err => {
-                  console.log('Error getting user: ' + user.uid, err);
-                });
+              var tripData = tripDoc.data();
+              if (tripData.createdBy !== user.uid) {
+                firestore
+                  .collection('users')
+                  .doc(tripData.createdBy)
+                  .get()
+                  .then(userDoc => {
+                    if (userDoc.exists) {
+                      var userData = userDoc.data();
+                      var trip = tripData;
+                      trip.id = tripDoc.id;
+                      trip.userIMG = userData.photoURL;
+                      trip.messengerURL = userData.messengerURL;
+                      trips.push(trip);
+                    }
+                  })
+                  .catch(err => {
+                    console.log('Error getting user: ' + user.uid, err);
+                  });
+              }
             });
+
             this.setState({ trips: trips });
           },
           err => {
