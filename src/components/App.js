@@ -11,7 +11,8 @@ import {
   FormControl,
   Container,
   Row,
-  Col
+  Col,
+  Collapse
 } from 'react-bootstrap';
 import { auth, provider, firestore } from '../firebase';
 import Friends from './Friends/Friends';
@@ -27,7 +28,8 @@ class App extends Component {
       activeTab: 'home',
       showLoginModal: true,
       currentUser: null,
-      messengerName: ''
+      messengerName: '',
+      messengerHelp: false
     };
   }
 
@@ -80,6 +82,10 @@ class App extends Component {
     this.setState({ showLoginModal: !this.state.showLoginModal });
   };
 
+  toggleLoginHelp = () => {
+    this.setState({ messengerHelp: !this.state.messengerHelp });
+  };
+
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value
@@ -123,9 +129,20 @@ class App extends Component {
           <Modal.Body>
             <Container className="login-modal">
               <Row>
-                <Col>Please provide your Facebook Username to chat:</Col>
+                <Col>
+                  Please provide your{' '}
+                  <a
+                    className="link"
+                    href="https://www.facebook.com/help/1740158369563165"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Facebook Username
+                  </a>{' '}
+                  to chat:
+                </Col>
               </Row>
-              <Row>
+              <Row className="username-help">
                 <Col>
                   <InputGroup className="mb-3">
                     <InputGroup.Prepend>
@@ -148,26 +165,27 @@ class App extends Component {
                         rel="noopener noreferrer"
                         target="_blank"
                       >
-                        Verify
+                        Test
                       </Button>
                     </InputGroup.Append>
                   </InputGroup>
                 </Col>
               </Row>
-              <Row className="justify-content-end username-help">
-                <div>
-                  Don't know your{' '}
-                  <a
-                    className="link"
-                    href="https://www.facebook.com/help/1740158369563165"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    username
-                  </a>
-                </div>
-                &nbsp;
-                <i className="material-icons">help_outline</i>
+              <Row className="username-help d-flex justify-content-end">
+                <Button
+                  variant="outline-primary"
+                  onClick={this.toggleLoginHelp}
+                  aria-expanded={this.state.messengerHelp}
+                >
+                  Find my username
+                </Button>
+              </Row>
+              <Row className="username-help">
+                <Collapse in={this.state.messengerHelp}>
+                  <div>
+                    <Image className="messenger-help-img" src={require('../pictures/messenger-info.png')} rounded />
+                  </div>
+                </Collapse>
               </Row>
             </Container>
           </Modal.Body>
@@ -212,7 +230,7 @@ class App extends Component {
         {/* App Routes */}
         {/* <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/friends" component={Friends} />
+          <Route exact path="/privacy-policy" component={Friends} />
           <Route path="/routes/:dest" render={props => <Routes {...props} />} />
           <Route component={Home} />
         </Switch> */}

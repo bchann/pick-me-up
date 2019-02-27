@@ -3,6 +3,23 @@ import { Button, Card, Col, Container, Form, Modal, Row } from 'react-bootstrap'
 import { firestore, auth } from '../../firebase';
 import './UserTrips.scss';
 
+const UserTripCard = props => (
+  <Row className="justify-content-center">
+    <Col xs={10} md={6}>
+      <Card border="primary">
+        <Card.Body>
+          <Card.Text>
+            <i onClick={() => props.removeTrip(props.trip.id)} className="material-icons trip-card-action">
+              remove_circle_outline
+            </i>
+            {props.trip.from} to {props.trip.to} at {props.trip.time}
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
+  </Row>
+);
+
 class UserTrips extends Component {
   constructor(props) {
     super(props);
@@ -97,22 +114,7 @@ class UserTrips extends Component {
             </Col>
           </Row>
           {this.state.trips.map(trip => {
-            return (
-              <Row key={trip.id} className="justify-content-center">
-                <Col xs={10} md={6}>
-                  <Card border="primary">
-                    <Card.Body>
-                      <Card.Text>
-                        <i onClick={() => this.removeTrip(trip.id)} className="material-icons trip-card-action">
-                          clear
-                        </i>
-                        {trip.from} to {trip.to} at {trip.time}
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              </Row>
-            );
+            return <UserTripCard key={trip.id} removeTrip={this.removeTrip} trip={trip} />;
           })}
         </Container>
 
