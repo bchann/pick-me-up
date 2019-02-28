@@ -105,12 +105,17 @@ class Home extends Component {
   addRecentSearch(loc) {
     var recentSearches = this.state.recentSearches;
 
-    if (loc && !recentSearches.includes(loc)) {
-      recentSearches.unshift(loc);
-
+    if (loc) {
       if (recentSearches.length > 3) {
         recentSearches.pop();
       }
+
+      var ind = recentSearches.indexOf(loc);
+      if (ind > -1) {
+        recentSearches.splice(ind, 1);
+      }
+
+      recentSearches.unshift(loc);
 
       this.setState({ recentSearches });
     }

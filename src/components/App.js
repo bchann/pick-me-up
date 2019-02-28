@@ -38,9 +38,10 @@ class App extends Component {
   componentDidMount() {
     auth.onAuthStateChanged(currentUser => {
       if (currentUser) {
-        this.setState({ currentUser });
-        this.getAllTrips();
-        this.getAllUsers();
+        this.setState({ currentUser }, () => {
+          this.getAllTrips();
+          this.getAllUsers();
+        });
       }
     });
   }
@@ -61,7 +62,7 @@ class App extends Component {
           }
         },
         err => {
-          console.log('Error getting trips: ', err);
+          console.log("Can't get user trips; are you logged in? ");
         }
       );
     }
@@ -83,7 +84,7 @@ class App extends Component {
           }
         },
         err => {
-          console.log('Error getting users: ', err);
+          console.log("Can't get users; are you logged in?");
         }
       );
     }
