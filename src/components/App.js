@@ -29,7 +29,9 @@ class App extends Component {
       showLoginModal: true,
       currentUser: null,
       messengerName: '',
-      messengerHelp: false
+      messengerHelp: false,
+      trips: [],
+      users: []
     };
   }
 
@@ -37,8 +39,54 @@ class App extends Component {
     auth.onAuthStateChanged(currentUser => {
       if (currentUser) {
         this.setState({ currentUser });
+        this.getAllTrips();
+        this.getAllUsers();
       }
     });
+  }
+
+  getAllTrips() {
+    if (this.state.currentUser) {
+      firestore.collection('trips').onSnapshot(
+        tripsSnapshot => {
+          if (!tripsSnapshot.empty) {
+            var trips = [];
+            tripsSnapshot.forEach(tripDoc => {
+              var trip = tripDoc.data();
+              trip.id = tripDoc.id;
+              trips.push(trip);
+            });
+
+            this.setState({ trips });
+          }
+        },
+        err => {
+          console.log('Error getting trips: ', err);
+        }
+      );
+    }
+  }
+
+  getAllUsers() {
+    if (this.state.currentUser) {
+      firestore.collection('users').onSnapshot(
+        usersSnapshot => {
+          if (!usersSnapshot.empty) {
+            var users = [];
+            usersSnapshot.forEach(userDoc => {
+              var user = userDoc.data();
+              user.id = userDoc.id;
+              users.push(user);
+            });
+
+            this.setState({ users });
+          }
+        },
+        err => {
+          console.log('Error getting users: ', err);
+        }
+      );
+    }
   }
 
   login = () => {
@@ -216,10 +264,10 @@ class App extends Component {
           </Nav>
           <Tab.Content>
             <Tab.Pane eventKey="routes">
-              <UserTrips />
+              <UserTrips currentUser={this.state.currentUser} trips={this.state.trips} />
             </Tab.Pane>
             <Tab.Pane id="home-tab" eventKey="home">
-              <Home />
+              <Home currentUser={this.state.currentUser} trips={this.state.trips} users={this.state.users} />
             </Tab.Pane>
             <Tab.Pane id="friends-tab" eventKey="friends">
               <Friends />

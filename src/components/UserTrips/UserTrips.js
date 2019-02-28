@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Card, Col, Container, Form, Modal, Row } from 'react-bootstrap';
-import { firestore, auth } from '../../firebase';
+import { firestore } from '../../firebase';
 import './UserTrips.scss';
 
 const UserTripCard = props => (
@@ -25,41 +25,42 @@ class UserTrips extends Component {
     super(props);
 
     this.state = {
-      currentUser: null,
+      currentUser: this.props.currentUser,
       dest: '',
-      trips: [],
+      trips: this.props.trips,
+      displayedTrips: [],
       from: '',
       to: '',
       time: ''
     };
+
+    this.getUserTrips();
   }
 
-  componentDidMount() {
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        this.setState({ currentUser: user });
+  componentDidUpdate() {
+    if (this.state.currentUser !== this.props.currentUser) {
+      this.setState({ currentUser: this.props.currentUser });
+      this.getUserTrips();
+    }
 
-        firestore
-          .collection('trips')
-          .where('createdBy', '==', user.uid)
-          .onSnapshot(
-            docSnapshot => {
-              var trips = [];
-              if (!docSnapshot.empty) {
-                docSnapshot.forEach(doc => {
-                  var trip = doc.data();
-                  trip.id = doc.id;
-                  trips.push(trip);
-                });
-              }
-              this.setState({ trips: trips });
-            },
-            err => {
-              console.log('Error getting user trips', err);
-            }
-          );
-      }
-    });
+    if (this.state.trips !== this.props.trips) {
+      this.setState({ trips: this.props.trips });
+      this.getUserTrips();
+    }
+  }
+
+  getUserTrips() {
+    var user = this.state.currentUser;
+
+    if (user && this.props.trips && this.props.trips.length) {
+      var displayedTrips = [];
+      this.props.trips.forEach(trip => {
+        if (trip.createdBy === user.uid) {
+          displayedTrips.push(trip);
+        }
+      });
+      this.setState({ displayedTrips });
+    }
   }
 
   showForm = () => {
@@ -113,7 +114,7 @@ class UserTrips extends Component {
               Your planned trips:
             </Col>
           </Row>
-          {this.state.trips.map(trip => {
+          {this.state.displayedTrips.map(trip => {
             return <UserTripCard key={trip.id} removeTrip={this.removeTrip} trip={trip} />;
           })}
         </Container>

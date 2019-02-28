@@ -1,55 +1,87 @@
 import React, { Component } from 'react';
 import { Button, Col, Container, FormControl, InputGroup, Row, ListGroup, Card, Image } from 'react-bootstrap';
-import { auth, firestore } from '../../firebase';
 import './Home.scss';
 
+const TripCard = props => (
+  <Row className="justify-content-center">
+    <Col xs={10} md={6}>
+      <Card border="primary" onClick={() => props.cardClicked(props.trip.messengerURL)}>
+        <Card.Body>
+          <Card.Title>
+            <Image className="trip-owner-picture" src={props.trip.userIMG} rounded /> {props.trip.displayName}
+            <i className="material-icons trip-card-action">message</i>
+          </Card.Title>
+          <Card.Text>
+            Driving from {props.trip.from} to {props.trip.to} at {props.trip.time}
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
+  </Row>
+);
+
 class Home extends Component {
-  constructor() {
-    super();
-    this.state = { currentUser: null, dest: '', searched: false, trips: [] };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentUser: this.props.currentUser,
+      dest: '',
+      searched: false,
+      trips: this.props.trips,
+      displayedTrips: [],
+      users: this.props.users,
+      activeRoute: window.location.pathname,
+      recentSearches: [],
+      favoritePlaces: []
+    };
+
+    this.getDisplayedTrips();
   }
 
-  componentDidMount() {
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        this.setState({ currentUser: user });
+  componentDidUpdate() {
+    if (this.state.currentUser !== this.props.currentUser) {
+      this.setState({ currentUser: this.props.currentUser });
+      this.getDisplayedTrips();
+    }
 
-        firestore.collection('trips').onSnapshot(
-          docSnapshot => {
-            var trips = [];
-            if (!docSnapshot.empty) {
-              docSnapshot.forEach(tripDoc => {
-                var tripData = tripDoc.data();
-                if (tripData.createdBy !== user.uid) {
-                  firestore
-                    .collection('users')
-                    .doc(tripData.createdBy)
-                    .get()
-                    .then(userDoc => {
-                      if (userDoc.exists) {
-                        var userData = userDoc.data();
-                        var trip = tripData;
-                        trip.id = tripDoc.id;
-                        trip.userIMG = userData.photoURL;
-                        trip.messengerURL = userData.messengerURL;
-                        trips.push(trip);
-                      }
-                    })
-                    .catch(err => {
-                      console.log('Error getting user: ' + user.uid, err);
-                    });
-                }
-              });
-            }
+    if (this.state.trips !== this.props.trips) {
+      this.setState({ trips: this.props.trips });
+      this.getDisplayedTrips();
+    }
 
-            this.setState({ trips: trips });
-          },
-          err => {
-            console.log('Error getting user trips', err);
+    if (this.state.users !== this.props.users) {
+      this.setState({ users: this.props.users });
+      this.getDisplayedTrips();
+    }
+  }
+
+  getDisplayedTrips() {
+    var user = this.state.currentUser;
+
+    if (user && this.props.users && this.props.users.length && this.props.trips && this.props.trips.length) {
+      var displayedTrips = [];
+      this.props.trips.forEach(trip => {
+        var tripOwner = this.props.users.find(user => {
+          return user.id === trip.createdBy;
+        });
+
+        if (tripOwner) {
+          trip.userIMG = tripOwner.photoURL;
+          trip.messengerURL = tripOwner.messengerURL;
+
+          // Filter here
+          if (
+            tripOwner.id !== user.uid &&
+            this.state.dest &&
+            trip.to.toLowerCase().includes(this.state.dest.toLowerCase())
+          ) {
+            displayedTrips.push(trip);
           }
-        );
-      }
-    });
+        }
+      });
+      this.setState({ displayedTrips });
+    }
   }
 
   handleChange = e => {
@@ -60,12 +92,37 @@ class Home extends Component {
 
   toggleSearch = () => {
     this.setState({ searched: !this.state.searched });
+    this.getDisplayedTrips();
+    this.addRecentSearch(this.state.dest);
   };
 
   suggestionSearch(loc) {
-    this.toggleSearch();
-    this.setState({ dest: loc });
+    this.setState({ dest: loc }, () => {
+      this.toggleSearch();
+    });
   }
+
+  addRecentSearch(loc) {
+    var recentSearches = this.state.recentSearches;
+
+    if (loc && !recentSearches.includes(loc)) {
+      recentSearches.unshift(loc);
+
+      if (recentSearches.length > 3) {
+        recentSearches.pop();
+      }
+
+      this.setState({ recentSearches });
+    }
+  }
+
+  addFavorite = () => {
+    var favoritePlaces = this.state.favoritePlaces;
+    if (this.state.dest && !favoritePlaces.includes(this.state.dest)) {
+      favoritePlaces.push(this.state.dest);
+      this.setState({ favoritePlaces });
+    }
+  };
 
   cardClicked(messengerURL) {
     window.open(messengerURL, '_blank');
@@ -87,36 +144,32 @@ class Home extends Component {
               </Row>
               <Row className="justify-content-center">
                 <Col xs={10} md={6}>
-                  Friend's trips to {this.state.dest}:
+                  {this.state.activeRoute === '/' && this.state.displayedTrips.length ? (
+                    <>
+                      Favorite this search
+                      <i onClick={this.addFavorite} className="material-icons favorite-icon">
+                        {this.state.favoritePlaces.includes(this.state.dest) ? 'star' : 'star_border'}
+                      </i>
+                      <br />
+                    </>
+                  ) : null}
+
+                  {this.state.displayedTrips.length
+                    ? "Friend's trips to " + this.state.dest + ':'
+                    : 'There are no trips to ' + this.state.dest + '. Please search again.'}
                 </Col>
               </Row>
-              {this.state.trips.map(trip => {
-                return (
-                  <Row key={trip.id} className="justify-content-center">
-                    <Col xs={10} md={6}>
-                      <Card border="primary" onClick={() => this.cardClicked(trip.messengerURL)}>
-                        <Card.Body>
-                          <Card.Title>
-                            <Image className="trip-owner-picture" src={trip.userIMG} rounded /> {trip.displayName}
-                            <i className="material-icons trip-card-action">message</i>
-                          </Card.Title>
-                          <Card.Text>
-                            Driving from {trip.from} to {trip.to} at {trip.time}
-                          </Card.Text>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                );
+              {this.state.displayedTrips.map(trip => {
+                return <TripCard key={trip.id} cardClicked={this.cardClicked} trip={trip} />;
               })}
             </Container>
           </div>
         ) : (
-          <div className="home-centered">
+          <div className="home">
             <Container>
               <Row className="justify-content-center">
                 <Col>
-                  <h1 style={{ color: 'var(--primary)' }}>Pick Me Up</h1>
+                  <h1 className="trips-title">Pick Me Up</h1>
                 </Col>
               </Row>
               <Row className="justify-content-center">
@@ -144,38 +197,85 @@ class Home extends Component {
                   </InputGroup>
                 </Col>
               </Row>
-              <Row className="justify-content-center">
-                <Col xs={10} md={6} className="suggestions-title">
-                  Recent Searches:
-                </Col>
-              </Row>
+              {this.state.activeRoute === '/popular' ? (
+                <>
+                  <Row className="justify-content-center">
+                    <Col xs={10} md={6} className="suggestions-title">
+                      Popular Places:
+                    </Col>
+                  </Row>
+                  <Row className="justify-content-center suggestions-item">
+                    <Col xs={10} md={6}>
+                      <ListGroup id="suggestions">
+                        <ListGroup.Item
+                          action
+                          className="justify-content-between d-flex"
+                          onClick={() => this.suggestionSearch('Vallartas')}
+                        >
+                          Vallartas
+                          <i className="material-icons">fastfood</i>
+                        </ListGroup.Item>
+                        <ListGroup.Item
+                          action
+                          className="justify-content-between d-flex"
+                          onClick={() => this.suggestionSearch('Costco')}
+                        >
+                          Costco
+                          <i className="material-icons">store</i>
+                        </ListGroup.Item>
+                        <ListGroup.Item
+                          action
+                          className="justify-content-between d-flex"
+                          onClick={() => this.suggestionSearch('Geisel')}
+                        >
+                          Geisel
+                          <i className="material-icons">book</i>
+                        </ListGroup.Item>
+                      </ListGroup>
+                    </Col>
+                  </Row>
+                </>
+              ) : (
+                <>
+                  {this.state.favoritePlaces.length ? (
+                    <Row className="justify-content-center">
+                      <Col xs={10} md={6} className="suggestions-title">
+                        Favorite Places:
+                      </Col>
+                    </Row>
+                  ) : null}
+                  <Row className="justify-content-center suggestions-item">
+                    <Col xs={10} md={6}>
+                      <ListGroup id="suggestions">
+                        {this.state.favoritePlaces.map(favorite => {
+                          return (
+                            <ListGroup.Item key={favorite} action onClick={() => this.suggestionSearch(favorite)}>
+                              {favorite}
+                            </ListGroup.Item>
+                          );
+                        })}
+                      </ListGroup>
+                    </Col>
+                  </Row>
+                </>
+              )}
+              {this.state.recentSearches.length ? (
+                <Row className="justify-content-center">
+                  <Col xs={10} md={6} className="suggestions-title">
+                    Recent Searches:
+                  </Col>
+                </Row>
+              ) : null}
               <Row className="justify-content-center suggestions-item">
                 <Col xs={10} md={6}>
-                  <ListGroup id="suggestions">
-                    <ListGroup.Item
-                      action
-                      className="justify-content-between d-flex"
-                      onClick={() => this.suggestionSearch('Geisel')}
-                    >
-                      Geisel
-                      <i className="material-icons">book</i>
-                    </ListGroup.Item>
-                    <ListGroup.Item
-                      action
-                      className="justify-content-between d-flex"
-                      onClick={() => this.suggestionSearch('Costco')}
-                    >
-                      Costco
-                      <i className="material-icons">store</i>
-                    </ListGroup.Item>
-                    <ListGroup.Item
-                      action
-                      className="justify-content-between d-flex"
-                      onClick={() => this.suggestionSearch("McDonald's")}
-                    >
-                      McDonald's
-                      <i className="material-icons">fastfood</i>
-                    </ListGroup.Item>
+                  <ListGroup id="recent">
+                    {this.state.recentSearches.map(search => {
+                      return (
+                        <ListGroup.Item key={search} action onClick={() => this.suggestionSearch(search)}>
+                          {search}
+                        </ListGroup.Item>
+                      );
+                    })}
                   </ListGroup>
                 </Col>
               </Row>
