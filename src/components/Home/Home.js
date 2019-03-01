@@ -94,9 +94,11 @@ class Home extends Component {
   };
 
   toggleSearch = () => {
+    if (!this.state.searched) {
+      this.getDisplayedTrips();
+      this.addRecentSearch(this.state.dest);
+    }
     this.setState({ searched: !this.state.searched });
-    this.getDisplayedTrips();
-    this.addRecentSearch(this.state.dest);
   };
 
   suggestionSearch(loc) {
@@ -152,7 +154,7 @@ class Home extends Component {
               </Row>
               <Row className="justify-content-center">
                 <Col xs={10} md={6}>
-                  {this.state.activeRoute === '/' && this.state.displayedTrips.length ? (
+                  {this.state.activeRoute !== '/popular' && this.state.displayedTrips.length ? (
                     <>
                       Favorite this search
                       <i onClick={this.addFavorite} className="material-icons favorite-icon">
@@ -164,7 +166,7 @@ class Home extends Component {
 
                   {this.state.displayedTrips.length
                     ? "Friend's trips to " + this.state.dest + ':'
-                    : 'There are no trips to ' + this.state.dest + '. Please search again.'}
+                    : 'There are no trips to ' + this.state.dest + '. Would you like to offer a ride?'}
                 </Col>
               </Row>
               {this.state.displayedTrips.map(trip => {

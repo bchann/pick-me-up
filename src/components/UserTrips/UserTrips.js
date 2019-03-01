@@ -81,9 +81,9 @@ class UserTrips extends Component {
     e.preventDefault();
 
     var trip = {
-      from: this.state.from,
-      to: this.state.to,
-      time: this.state.time,
+      from: this.state.from.trim(),
+      to: this.state.to.trim(),
+      time: this.state.time.trim(),
       displayName: this.state.currentUser.displayName,
       createdBy: this.state.currentUser.uid
     };
