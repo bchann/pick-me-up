@@ -74,7 +74,10 @@ class Home extends Component {
           if (
             tripOwner.id !== user.uid &&
             this.state.dest &&
-            trip.to.toLowerCase().includes(this.state.dest.toLowerCase())
+            trip.to
+              .trim()
+              .toLowerCase()
+              .includes(this.state.dest.trim().toLowerCase())
           ) {
             displayedTrips.push(trip);
           }
@@ -106,7 +109,7 @@ class Home extends Component {
     var recentSearches = this.state.recentSearches;
 
     if (loc) {
-      if (recentSearches.length > 3) {
+      if (recentSearches.length >= 3) {
         recentSearches.pop();
       }
 
