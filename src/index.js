@@ -7,6 +7,10 @@ import { BrowserRouter } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
 import App from './components/App';
 
+import ReactGA from 'react-ga';
+ReactGA.initialize('UA-135550181-1');
+ReactGA.pageview(window.location.pathname + window.location.search);
+
 ReactDOM.render(
   <BrowserRouter>
     <App />

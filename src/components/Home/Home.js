@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Col, Container, FormControl, InputGroup, Row, ListGroup, Card, Image } from 'react-bootstrap';
+import ReactGA from 'react-ga';
 import './Home.scss';
 
 const TripCard = props => (
@@ -101,8 +102,32 @@ class Home extends Component {
     this.setState({ searched: !this.state.searched });
   };
 
-  suggestionSearch(loc) {
-    this.setState({ dest: loc }, () => {
+  suggestionSearch(dest, src) {
+    if (src === 'favorite') {
+      ReactGA.event({
+        category: 'User',
+        action: 'Clicked favorited search'
+      });
+
+      // gtag('event', 'click', {
+      //   event_category: 'favorite',
+      //   event_label: 'Favorited search clicked'
+      // });
+    }
+
+    if (src === 'popular') {
+      ReactGA.event({
+        category: 'User',
+        action: 'Clicked popular search'
+      });
+
+      // gtag('event', 'click', {
+      //   event_category: 'popular',
+      //   event_label: 'Popular search clicked'
+      // });
+    }
+
+    this.setState({ dest }, () => {
       this.toggleSearch();
     });
   }
@@ -220,7 +245,7 @@ class Home extends Component {
                         <ListGroup.Item
                           action
                           className="justify-content-between d-flex"
-                          onClick={() => this.suggestionSearch('Vallartas')}
+                          onClick={() => this.suggestionSearch('Vallartas', 'popular')}
                         >
                           Vallartas
                           <i className="material-icons">fastfood</i>
@@ -228,7 +253,7 @@ class Home extends Component {
                         <ListGroup.Item
                           action
                           className="justify-content-between d-flex"
-                          onClick={() => this.suggestionSearch('Costco')}
+                          onClick={() => this.suggestionSearch('Costco', 'popular')}
                         >
                           Costco
                           <i className="material-icons">store</i>
@@ -236,7 +261,7 @@ class Home extends Component {
                         <ListGroup.Item
                           action
                           className="justify-content-between d-flex"
-                          onClick={() => this.suggestionSearch('Geisel')}
+                          onClick={() => this.suggestionSearch('Geisel', 'popular')}
                         >
                           Geisel
                           <i className="material-icons">book</i>
@@ -259,7 +284,11 @@ class Home extends Component {
                       <ListGroup id="suggestions">
                         {this.state.favoritePlaces.map(favorite => {
                           return (
-                            <ListGroup.Item key={favorite} action onClick={() => this.suggestionSearch(favorite)}>
+                            <ListGroup.Item
+                              key={favorite}
+                              action
+                              onClick={() => this.suggestionSearch(favorite, 'favorite')}
+                            >
                               {favorite}
                             </ListGroup.Item>
                           );
@@ -281,7 +310,7 @@ class Home extends Component {
                   <ListGroup id="recent">
                     {this.state.recentSearches.map(search => {
                       return (
-                        <ListGroup.Item key={search} action onClick={() => this.suggestionSearch(search)}>
+                        <ListGroup.Item key={search} action onClick={() => this.suggestionSearch(search, 'recent')}>
                           {search}
                         </ListGroup.Item>
                       );
