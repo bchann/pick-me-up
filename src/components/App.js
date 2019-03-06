@@ -145,6 +145,10 @@ class App extends Component {
     this.setState({ activeTab: e });
   };
 
+  doNothing() {
+    console.log('Please login before using the app.');
+  }
+
   render() {
     return (
       <>
@@ -171,7 +175,7 @@ class App extends Component {
           />
         </OverlayTrigger>
 
-        <Modal show={this.state.currentUser === null && this.state.showLoginModal} onHide={this.toggleModal} centered>
+        <Modal show={this.state.currentUser === null && this.state.showLoginModal} onHide={this.doNothing} centered>
           <Modal.Header>
             <Modal.Title>Login</Modal.Title>
           </Modal.Header>
