@@ -192,7 +192,7 @@ class App extends Component {
                   >
                     Facebook Username
                   </a>{' '}
-                  to chat:
+                  to chat and login:
                 </Col>
               </Row>
               <Row className="username-help">
@@ -230,7 +230,7 @@ class App extends Component {
                   onClick={this.toggleLoginHelp}
                   aria-expanded={this.state.messengerHelp}
                 >
-                  Find my username
+                  Username Help
                 </Button>
               </Row>
               <Row className="username-help">
