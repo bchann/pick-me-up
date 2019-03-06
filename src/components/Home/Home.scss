@@ -5,6 +5,14 @@
   align-items: center;
 }
 
+.home-centered {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .row {
   margin-bottom: 20px;
 }

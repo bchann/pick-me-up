@@ -9,7 +9,7 @@ const UserTripCard = props => (
       <Card border="primary">
         <Card.Body>
           <Card.Text>
-            <i onClick={() => props.removeTrip(props.trip.id)} className="material-icons trip-card-action">
+            <i onClick={() => props.removeTrip(props.trip.id)} className="material-icons card-action-icon">
               remove_circle_outline
             </i>
             {props.trip.from} to {props.trip.to} at {props.trip.time}

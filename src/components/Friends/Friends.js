@@ -45,7 +45,7 @@ class Friends extends Component {
           </Row>
           <Row className="justify-content-center">
             <Col xs={10} md={6}>
-              My Friends
+              My Friends:
             </Col>
           </Row>
           {Object.keys(friends).map(friend => {
@@ -57,7 +57,7 @@ class Friends extends Component {
                       <Card.Title>
                         <Image className="trip-owner-picture" src={friends[friend].image} rounded />{' '}
                         {friends[friend].name}
-                        <i className="material-icons trip-card-action">message</i>
+                        <i className="material-icons card-action-icon">message</i>
                       </Card.Title>
                       <Card.Text>{friends[friend].description}</Card.Text>
                     </Card.Body>

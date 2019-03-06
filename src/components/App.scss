@@ -29,7 +29,7 @@
   text-decoration: underline;
 }
 
-.trip-card-action {
+.card-action-icon {
   color: var(--primary);
   position: absolute;
   right: 10px;
@@ -38,4 +38,8 @@
 
 .messenger-help-img {
   width: 100%;
+}
+
+.material-icons {
+  vertical-align: text-bottom;
 }

@@ -10,7 +10,7 @@ const TripCard = props => (
         <Card.Body>
           <Card.Title>
             <Image className="trip-owner-picture" src={props.trip.userIMG} rounded /> {props.trip.displayName}
-            <i className="material-icons trip-card-action">message</i>
+            <i className="material-icons card-action-icon">message</i>
           </Card.Title>
           <Card.Text>
             Driving from {props.trip.from} to {props.trip.to} at {props.trip.time}
@@ -200,7 +200,7 @@ class Home extends Component {
             </Container>
           </div>
         ) : (
-          <div className="home">
+          <div className="home-centered">
             <Container>
               <Row className="justify-content-center">
                 <Col>
