@@ -7,7 +7,7 @@ const UserTripCard = props => (
   <Row className="justify-content-center">
     <Col xs={10} md={6}>
       <Card border="primary">
-        <Card.Body>
+        <Card.Body className="trip-card">
           <Card.Text>
             <i onClick={() => props.removeTrip(props.trip.id)} className="material-icons card-action-icon">
               remove_circle_outline

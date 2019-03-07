@@ -179,19 +179,18 @@ class Home extends Component {
               </Row>
               <Row className="justify-content-center">
                 <Col xs={10} md={6}>
+                {this.state.displayedTrips.length
+                    ? "Friend's trips to " + this.state.dest + ':'
+                    : 'There are no trips to ' + this.state.dest + '. Would you like to offer a ride?'}
+                <br />
                   {this.state.activeRoute !== '/popular' && this.state.displayedTrips.length ? (
                     <>
-                      Favorite this search
+                      <b>Favorite This Location</b>
                       <i onClick={this.addFavorite} className="material-icons favorite-icon">
                         {this.state.favoritePlaces.includes(this.state.dest) ? 'star' : 'star_border'}
                       </i>
-                      <br />
                     </>
                   ) : null}
-
-                  {this.state.displayedTrips.length
-                    ? "Friend's trips to " + this.state.dest + ':'
-                    : 'There are no trips to ' + this.state.dest + '. Would you like to offer a ride?'}
                 </Col>
               </Row>
               {this.state.displayedTrips.map(trip => {
@@ -218,7 +217,7 @@ class Home extends Component {
                     <FormControl
                       type="text"
                       className="form-control"
-                      placeholder="Destination"
+                      placeholder="Destination Name"
                       aria-label="Destination"
                       name="dest"
                       value={this.state.dest}
