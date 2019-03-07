@@ -108,11 +108,6 @@ class Home extends Component {
         category: 'User',
         action: 'Clicked favorited search'
       });
-
-      // gtag('event', 'click', {
-      //   event_category: 'favorite',
-      //   event_label: 'Favorited search clicked'
-      // });
     }
 
     if (src === 'popular') {
@@ -120,11 +115,6 @@ class Home extends Component {
         category: 'User',
         action: 'Clicked popular search'
       });
-
-      // gtag('event', 'click', {
-      //   event_category: 'popular',
-      //   event_label: 'Popular search clicked'
-      // });
     }
 
     this.setState({ dest }, () => {
@@ -151,10 +141,17 @@ class Home extends Component {
     }
   }
 
-  addFavorite = () => {
+  toggleFavorite = () => {
     var favoritePlaces = this.state.favoritePlaces;
-    if (this.state.dest && !favoritePlaces.includes(this.state.dest)) {
-      favoritePlaces.push(this.state.dest);
+    if (this.state.dest) {
+      if (favoritePlaces.includes(this.state.dest)) {
+        var ind = favoritePlaces.indexOf(this.state.dest);
+        if (ind > -1) {
+          favoritePlaces.splice(ind, 1);
+        }
+      } else {
+        favoritePlaces.push(this.state.dest);
+      }
       this.setState({ favoritePlaces });
     }
   };
@@ -174,19 +171,22 @@ class Home extends Component {
               </i>
               <Row className="justify-content-center">
                 <Col xs={10} md={6}>
-                  <h1 className="trips-title">Pick Me Up</h1>
+                  <h1 className="search-title">Pick Me Up</h1>
                 </Col>
               </Row>
               <Row className="justify-content-center">
                 <Col xs={10} md={6}>
-                {this.state.displayedTrips.length
+                  {this.state.displayedTrips.length
                     ? "Friend's trips to " + this.state.dest + ':'
                     : 'There are no trips to ' + this.state.dest + '. Would you like to offer a ride?'}
-                <br />
+                </Col>
+              </Row>
+              <Row className="justify-content-center favorite-row">
+                <Col className="d-flex justify-content-end" xs={10} md={6}>
                   {this.state.activeRoute !== '/popular' && this.state.displayedTrips.length ? (
                     <>
-                      <b>Favorite This Location</b>
-                      <i onClick={this.addFavorite} className="material-icons favorite-icon">
+                      Favorite this destination &nbsp;
+                      <i onClick={this.toggleFavorite} className="material-icons favorite-icon">
                         {this.state.favoritePlaces.includes(this.state.dest) ? 'star' : 'star_border'}
                       </i>
                     </>
@@ -201,9 +201,14 @@ class Home extends Component {
         ) : (
           <div className="home-centered">
             <Container>
-              <Row className="justify-content-center">
-                <Col>
-                  <h1 className="trips-title">Pick Me Up</h1>
+              <Row className="justify-content-center no-margin">
+                <Col xs={10} md={6}>
+                  <h1 className="home-title">Pick Me Up</h1>
+                </Col>
+              </Row>
+              <Row className="justify-content-center no-margin">
+                <Col xs={10} md={6}>
+                  <p className="slogan">Trips are more fun with friends</p>
                 </Col>
               </Row>
               <Row className="justify-content-center">
@@ -274,7 +279,7 @@ class Home extends Component {
                   {this.state.favoritePlaces.length ? (
                     <Row className="justify-content-center">
                       <Col xs={10} md={6} className="suggestions-title">
-                        Favorite Places:
+                        Favorite Destinations:
                       </Col>
                     </Row>
                   ) : null}

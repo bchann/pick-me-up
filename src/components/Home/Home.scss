@@ -17,9 +17,21 @@
   margin-bottom: 20px;
 }
 
-.trips-title {
+.no-margin {
+  margin-bottom: 0px;
+}
+
+.home-title {
+  color: var(--primary);
+}
+
+.search-title {
   color: var(--primary);
   padding-left: 40px;
+}
+
+.slogan {
+  font-style: italic;
 }
 
 .suggestions-title {
@@ -37,7 +49,7 @@
   position: absolute;
   left: 50px;
   top: 50px;
-  font-size: 30px;
+  font-size: 35px;
   z-index: 900;
 }
 
@@ -46,9 +58,10 @@
   width: 30px;
 }
 
+.favorite-row {
+  margin-bottom: 5px;
+}
+
 .favorite-icon {
   color: var(--primary);
-  position: absolute;
-  right: 0px;
-  font-size: 35px;
 }

@@ -132,7 +132,7 @@ class UserTrips extends Component {
                 <Form.Label>From</Form.Label>
                 <Form.Control
                   type="input"
-                  placeholder="Enter location"
+                  placeholder="Enter location name"
                   name="from"
                   onChange={this.handleChange}
                   value={this.state.from}
@@ -142,7 +142,7 @@ class UserTrips extends Component {
                 <Form.Label>To</Form.Label>
                 <Form.Control
                   type="input"
-                  placeholder="Enter location"
+                  placeholder="Enter location name"
                   name="to"
                   onChange={this.handleChange}
                   value={this.state.to}
@@ -152,7 +152,7 @@ class UserTrips extends Component {
                 <Form.Label>Time</Form.Label>
                 <Form.Control
                   type="input"
-                  placeholder="Enter time"
+                  placeholder="Enter time (hh:mm AM/PM)"
                   name="time"
                   onChange={this.handleChange}
                   value={this.state.time}
