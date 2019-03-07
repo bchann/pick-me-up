@@ -31,7 +31,9 @@ class App extends Component {
       messengerName: '',
       messengerHelp: false,
       trips: [],
-      users: []
+      users: [],
+      unsubscribeUsers: null,
+      unsubscribeTrips: null
     };
   }
 
@@ -48,7 +50,7 @@ class App extends Component {
 
   getAllTrips() {
     if (this.state.currentUser) {
-      firestore.collection('trips').onSnapshot(
+      var unsubscribeTrips = firestore.collection('trips').onSnapshot(
         tripsSnapshot => {
           if (!tripsSnapshot.empty) {
             var trips = [];
@@ -65,12 +67,14 @@ class App extends Component {
           console.log("Can't get user trips; are you logged in? ");
         }
       );
+
+      this.setState({ unsubscribeTrips });
     }
   }
 
   getAllUsers() {
     if (this.state.currentUser) {
-      firestore.collection('users').onSnapshot(
+      var unsubscribeUsers = firestore.collection('users').onSnapshot(
         usersSnapshot => {
           if (!usersSnapshot.empty) {
             var users = [];
@@ -87,6 +91,8 @@ class App extends Component {
           console.log("Can't get users; are you logged in?");
         }
       );
+
+      this.setState({ unsubscribeUsers });
     }
   }
 
@@ -123,7 +129,16 @@ class App extends Component {
 
   logout = () => {
     auth.signOut().then(() => {
-      this.setState({ currentUser: null, messengerName: '', activeTab: 'home' });
+      this.state.unsubscribeTrips();
+      this.state.unsubscribeUsers();
+
+      this.setState({
+        currentUser: null,
+        messengerName: '',
+        activeTab: 'home',
+        unsubscribeTrips: null,
+        unsubscribeUsers: null
+      });
     });
   };
 
@@ -230,7 +245,7 @@ class App extends Component {
                   onClick={this.toggleLoginHelp}
                   aria-expanded={this.state.messengerHelp}
                 >
-                  Username Help
+                  Username Help <i className="material-icons">help_outline</i>
                 </Button>
               </Row>
               <Row className="username-help">

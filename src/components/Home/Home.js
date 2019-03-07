@@ -34,24 +34,24 @@ class Home extends Component {
       users: this.props.users,
       activeRoute: window.location.pathname,
       recentSearches: [],
-      favoritePlaces: []
+      favoritePlaces: ['Geisel', 'UCSD']
     };
 
     this.getDisplayedTrips();
   }
 
-  componentDidUpdate() {
-    if (this.state.currentUser !== this.props.currentUser) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.currentUser !== this.props.currentUser) {
       this.setState({ currentUser: this.props.currentUser });
       this.getDisplayedTrips();
     }
 
-    if (this.state.trips !== this.props.trips) {
+    if (prevProps.trips !== this.props.trips) {
       this.setState({ trips: this.props.trips });
       this.getDisplayedTrips();
     }
 
-    if (this.state.users !== this.props.users) {
+    if (prevProps.users !== this.props.users) {
       this.setState({ users: this.props.users });
       this.getDisplayedTrips();
     }
@@ -95,11 +95,13 @@ class Home extends Component {
   };
 
   toggleSearch = () => {
-    if (!this.state.searched) {
+    if (this.state.searched) {
+      this.setState({ searched: false, dest: '' });
+    } else {
       this.getDisplayedTrips();
       this.addRecentSearch(this.state.dest);
+      this.setState({ searched: true });
     }
-    this.setState({ searched: !this.state.searched });
   };
 
   suggestionSearch(dest, src) {
