@@ -100,9 +100,6 @@ class App extends Component {
     auth.signInWithPopup(provider).then(res => {
       var user = res.user;
       var additionalInfo = res.additionalUserInfo;
-
-      this.setState({ currentUser: user });
-
       var userRef = firestore.collection('users').doc(user.uid);
       var userData = {};
       var messengerURL = 'https://m.me/' + this.state.messengerName;
@@ -124,13 +121,19 @@ class App extends Component {
           userRef.update({ messengerURL });
         }
       });
+
+      this.setState({ currentUser: user });
     });
   };
 
   logout = () => {
     auth.signOut().then(() => {
-      this.state.unsubscribeTrips();
-      this.state.unsubscribeUsers();
+      if (this.state.unsubscribeTrips) {
+        this.state.unsubscribeTrips();
+      }
+      if (this.state.unsubscribeUsers) {
+        this.state.unsubscribeUsers();
+      }
 
       this.setState({
         currentUser: null,

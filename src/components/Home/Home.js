@@ -41,18 +41,23 @@ class Home extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    var updated = false;
     if (prevProps.currentUser !== this.props.currentUser) {
       this.setState({ currentUser: this.props.currentUser });
-      this.getDisplayedTrips();
+      updated = true;
     }
 
     if (prevProps.trips !== this.props.trips) {
       this.setState({ trips: this.props.trips });
-      this.getDisplayedTrips();
+      updated = true;
     }
 
     if (prevProps.users !== this.props.users) {
       this.setState({ users: this.props.users });
+      updated = true;
+    }
+
+    if (updated) {
       this.getDisplayedTrips();
     }
   }
@@ -99,19 +104,20 @@ class Home extends Component {
       this.setState({ searched: false, dest: '' });
     } else {
       this.getDisplayedTrips();
-      this.addRecentSearch(this.state.dest);
-      this.setState({ searched: true });
+      this.setState({ searched: true }, () => {
+        this.addRecentSearch();
+      });
     }
   };
 
   suggestionSearch(dest, src) {
+    // Google Analytics events
     if (src === 'favorite') {
       ReactGA.event({
         category: 'User',
         action: 'Clicked favorited search'
       });
     }
-
     if (src === 'popular') {
       ReactGA.event({
         category: 'User',
@@ -124,20 +130,20 @@ class Home extends Component {
     });
   }
 
-  addRecentSearch(loc) {
+  addRecentSearch() {
     var recentSearches = this.state.recentSearches;
 
-    if (loc) {
+    if (this.state.dest) {
       if (recentSearches.length >= 3) {
         recentSearches.pop();
       }
 
-      var ind = recentSearches.indexOf(loc);
+      var ind = recentSearches.indexOf(this.state.dest);
       if (ind > -1) {
         recentSearches.splice(ind, 1);
       }
 
-      recentSearches.unshift(loc);
+      recentSearches.unshift(this.state.dest);
 
       this.setState({ recentSearches });
     }
@@ -152,7 +158,7 @@ class Home extends Component {
           favoritePlaces.splice(ind, 1);
         }
       } else {
-        favoritePlaces.push(this.state.dest);
+        favoritePlaces.unshift(this.state.dest);
       }
       this.setState({ favoritePlaces });
     }
@@ -242,7 +248,7 @@ class Home extends Component {
                 <>
                   <Row className="justify-content-center">
                     <Col xs={10} md={6} className="suggestions-title">
-                      Popular Places:
+                      Popular Locations:
                     </Col>
                   </Row>
                   <Row className="justify-content-center suggestions-item">
