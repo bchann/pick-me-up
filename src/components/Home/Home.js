@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Button, Col, Container, FormControl, InputGroup, Row, ListGroup, Card, Image } from 'react-bootstrap';
-import ReactGA from 'react-ga';
 import './Home.scss';
 
 const TripCard = props => (
@@ -12,6 +11,7 @@ const TripCard = props => (
             <Image className="trip-owner-picture" src={props.trip.userIMG} rounded /> {props.trip.displayName}
             <i className="material-icons card-action-icon">message</i>
           </Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">{Math.floor(Math.random() * 4) + 1}/4 Spots Open</Card.Subtitle>
           <Card.Text>
             Driving from {props.trip.from} to {props.trip.to} at {props.trip.time}
           </Card.Text>
@@ -110,21 +110,7 @@ class Home extends Component {
     }
   };
 
-  suggestionSearch(dest, src) {
-    // Google Analytics events
-    if (src === 'favorite') {
-      ReactGA.event({
-        category: 'User',
-        action: 'Clicked favorited search'
-      });
-    }
-    if (src === 'popular') {
-      ReactGA.event({
-        category: 'User',
-        action: 'Clicked popular search'
-      });
-    }
-
+  suggestionSearch(dest) {
     this.setState({ dest }, () => {
       this.toggleSearch();
     });
@@ -174,12 +160,14 @@ class Home extends Component {
         {this.state.currentUser && this.state.searched ? (
           <div className="home">
             <Container>
-              <i onClick={this.toggleSearch} className="material-icons search-button">
-                arrow_back
-              </i>
-              <Row className="justify-content-center">
-                <Col xs={10} md={6}>
-                  <h1 className="search-title">Pick Me Up</h1>
+              <Row>
+                <Col xs={{ span: 9, offset: 1 }} md={6}>
+                  <h1 className="search-title">
+                    <i onClick={this.toggleSearch} className="material-icons search-button">
+                      arrow_back
+                    </i>
+                    Pick Me Up
+                  </h1>
                 </Col>
               </Row>
               <Row className="justify-content-center">
@@ -244,72 +232,6 @@ class Home extends Component {
                   </InputGroup>
                 </Col>
               </Row>
-              {this.state.activeRoute === '/popular' ? (
-                <>
-                  <Row className="justify-content-center">
-                    <Col xs={10} md={6} className="suggestions-title">
-                      Popular Locations:
-                    </Col>
-                  </Row>
-                  <Row className="justify-content-center suggestions-item">
-                    <Col xs={10} md={6}>
-                      <ListGroup id="suggestions">
-                        <ListGroup.Item
-                          action
-                          className="justify-content-between d-flex"
-                          onClick={() => this.suggestionSearch('Vallartas', 'popular')}
-                        >
-                          Vallartas
-                          <i className="material-icons">fastfood</i>
-                        </ListGroup.Item>
-                        <ListGroup.Item
-                          action
-                          className="justify-content-between d-flex"
-                          onClick={() => this.suggestionSearch('Costco', 'popular')}
-                        >
-                          Costco
-                          <i className="material-icons">store</i>
-                        </ListGroup.Item>
-                        <ListGroup.Item
-                          action
-                          className="justify-content-between d-flex"
-                          onClick={() => this.suggestionSearch('Geisel', 'popular')}
-                        >
-                          Geisel
-                          <i className="material-icons">book</i>
-                        </ListGroup.Item>
-                      </ListGroup>
-                    </Col>
-                  </Row>
-                </>
-              ) : (
-                <>
-                  {this.state.favoritePlaces.length ? (
-                    <Row className="justify-content-center">
-                      <Col xs={10} md={6} className="suggestions-title">
-                        Favorite Destinations:
-                      </Col>
-                    </Row>
-                  ) : null}
-                  <Row className="justify-content-center suggestions-item">
-                    <Col xs={10} md={6}>
-                      <ListGroup id="suggestions">
-                        {this.state.favoritePlaces.map(favorite => {
-                          return (
-                            <ListGroup.Item
-                              key={favorite}
-                              action
-                              onClick={() => this.suggestionSearch(favorite, 'favorite')}
-                            >
-                              {favorite}
-                            </ListGroup.Item>
-                          );
-                        })}
-                      </ListGroup>
-                    </Col>
-                  </Row>
-                </>
-              )}
               {this.state.recentSearches.length ? (
                 <Row className="justify-content-center">
                   <Col xs={10} md={6} className="suggestions-title">
@@ -322,11 +244,66 @@ class Home extends Component {
                   <ListGroup id="recent">
                     {this.state.recentSearches.map(search => {
                       return (
-                        <ListGroup.Item key={search} action onClick={() => this.suggestionSearch(search, 'recent')}>
+                        <ListGroup.Item key={search} action onClick={() => this.suggestionSearch(search)}>
                           {search}
                         </ListGroup.Item>
                       );
                     })}
+                  </ListGroup>
+                </Col>
+              </Row>
+              {this.state.favoritePlaces.length ? (
+                <Row className="justify-content-center">
+                  <Col xs={10} md={6} className="suggestions-title">
+                    Favorite Destinations:
+                  </Col>
+                </Row>
+              ) : null}
+              <Row className="justify-content-center suggestions-item">
+                <Col xs={10} md={6}>
+                  <ListGroup id="suggestions">
+                    {this.state.favoritePlaces.map(favorite => {
+                      return (
+                        <ListGroup.Item key={favorite} action onClick={() => this.suggestionSearch(favorite)}>
+                          {favorite}
+                        </ListGroup.Item>
+                      );
+                    })}
+                  </ListGroup>
+                </Col>
+              </Row>
+              <Row className="justify-content-center">
+                <Col xs={10} md={6} className="suggestions-title">
+                  Popular Destinations:
+                </Col>
+              </Row>
+              <Row className="justify-content-center suggestions-item">
+                <Col xs={10} md={6}>
+                  <ListGroup id="suggestions">
+                    <ListGroup.Item
+                      action
+                      className="justify-content-between d-flex"
+                      onClick={() => this.suggestionSearch('Vallartas')}
+                    >
+                      Vallartas
+                      <i className="material-icons">fastfood</i>
+                    </ListGroup.Item>
+                    <ListGroup.Item
+                      action
+                      className="justify-content-between d-flex"
+                      onClick={() => this.suggestionSearch('Costco')}
+                    >
+                      Costco
+                      <i className="material-icons">store</i>
+                    </ListGroup.Item>
+                    <ListGroup.Item
+                      action
+                      className="justify-content-between d-flex"
+                      onClick={() => this.suggestionSearch('Geisel')}
+                    >
+                      Geisel
+                      <i className="material-icons">book</i>
+                    </ListGroup.Item>
                   </ListGroup>
                 </Col>
               </Row>

@@ -13,10 +13,6 @@
   justify-content: center;
 }
 
-.row {
-  margin-bottom: 20px;
-}
-
 .no-margin {
   margin-bottom: 0px;
 }
@@ -27,11 +23,11 @@
 
 .search-title {
   color: var(--primary);
-  padding-left: 40px;
 }
 
 .slogan {
   font-style: italic;
+  color: grey;
 }
 
 .suggestions-title {
@@ -46,11 +42,9 @@
 
 .search-button {
   color: var(--primary);
-  position: absolute;
-  left: 50px;
-  top: 50px;
-  font-size: 35px;
+  font-size: 2.5rem;
   z-index: 900;
+  margin-bottom: 5px;
 }
 
 .trip-owner-picture {
