@@ -195,7 +195,7 @@ class Home extends Component {
             </Container>
           </div>
         ) : (
-          <div className="home-centered">
+          <div className="home">
             <Container>
               <Row className="justify-content-center no-margin">
                 <Col xs={10} md={6}>
@@ -230,26 +230,6 @@ class Home extends Component {
                       </Button>
                     </InputGroup.Append>
                   </InputGroup>
-                </Col>
-              </Row>
-              {this.state.recentSearches.length ? (
-                <Row className="justify-content-center">
-                  <Col xs={10} md={6} className="suggestions-title">
-                    Recent Searches:
-                  </Col>
-                </Row>
-              ) : null}
-              <Row className="justify-content-center suggestions-item">
-                <Col xs={10} md={6}>
-                  <ListGroup id="recent">
-                    {this.state.recentSearches.map(search => {
-                      return (
-                        <ListGroup.Item key={search} action onClick={() => this.suggestionSearch(search)}>
-                          {search}
-                        </ListGroup.Item>
-                      );
-                    })}
-                  </ListGroup>
                 </Col>
               </Row>
               {this.state.favoritePlaces.length ? (
